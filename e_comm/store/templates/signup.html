@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SIGN UP</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="registration-form">
+        <h1>Create your account</h1>
+        <form action="{% url 'sign' %}" method="post">
+            {% csrf_token %}
+            <p>Full Name:</p>
+            <input type="text" name="name" placeholder="Full Name" required>
+            <p>Email:</p>
+            <input type="email" name="email" placeholder="Email" required>
+            <p>Password:</p>
+            <input type="password" name="password" placeholder="Password" required>
+            <p>Phone Number:</p>
+            <input type="text" name="phone_number" placeholder="Phone Number" optional>
+            <button type="submit">Register</button>
+        </form>
+    </div>
+</body>
+</html>
