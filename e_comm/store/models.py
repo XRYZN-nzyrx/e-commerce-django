@@ -13,10 +13,22 @@ class Product(models.Model):
     stock_quantity = models.PositiveIntegerField()  
     category = models.CharField(max_length=255, blank=True, null=True)
 
+# class Cart(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='carts')
+#     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='carts', null=True, blank=True)
+#     quantity = models.PositiveIntegerField(default=0)
+
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='carts')
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='carts')
-    quantity = models.PositiveIntegerField()
+    products = models.ManyToManyField(Product, through='CartProduct', related_name='carts')
+
+class CartProduct(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+
+    class Meta:
+        unique_together = ('cart', 'product')
 
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
