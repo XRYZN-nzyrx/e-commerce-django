@@ -31,7 +31,9 @@ def shop_detail(request):
     return render(request, 'shop-detail.html')
 
 def shop(request):
-    return render(request, 'shop.html')
+    products = Product.objects.all()
+
+    return render(request, 'shop.html', {"products":products})
 
 def testimonial(request):
     return render(request, 'testimonial.html')
@@ -79,3 +81,10 @@ def sign(request):
     
     return redirect('../signup/')
 
+def addToCart(req, id):
+    product = Product.objects.get(id = id)
+    user_data = req.session.get('current_user', {})
+    user = User.objects.filter(email = user_data['email'], name = user_data['name']).first()
+    cart = Cart.objects.filter(user = user).first()
+    CartProduct.objects.create(cart=cart, product=product, quantity=1)
+    return redirect('../cart.html')
